@@ -9,11 +9,17 @@
     <p><strong>Date:</strong> @Model.RentalDate</p>
     <p><strong>Duration:</strong> @(Model.IsTwoDays ? "2 Days" : "1 Day")</p>
     <p><strong>Purpose:</strong> @Model.Purpose</p>
-    <p>You'll receive a confirmation email shortly. A deposit may be required to fully secure your date.</p>
+
+    <p class="mt-4">
+        To secure your booking, a deposit is required.
+    </p>
+
+    <a href="/Deposit" class="btn btn-success mt-3">Pay Deposit Now</a>
 }
 else
 {
     <p>Oops! No booking information found. Please try again.</p>
 }
 
-<a href="/" class="btn btn-primary mt-4">Back to Home</a>
+<a href="/" class="btn btn-outline-primary mt-4">Back to Home</a>
+
