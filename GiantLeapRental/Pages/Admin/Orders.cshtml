@@ -1,0 +1,36 @@
+﻿@page
+@model GiantLeapRental.Pages.Admin.OrdersModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<h2>All Bookings</h2>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Rental</th>
+                <th>Date</th>
+                <th>Purpose</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr>
+                    <td>@booking.RentalName</td>
+                    <td>@booking.Date</td>
+                    <td>@booking.Purpose</td>
+                    <td>@booking.Duration</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-danger">You must be logged in to view this page.</div>
+}
+
