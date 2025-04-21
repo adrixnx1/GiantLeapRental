@@ -1,11 +1,11 @@
 ﻿@page
-@model GiantLeapRental.Pages.Admin.OrdersModel
+@model GiantLeapRental.Pages.Bookings.MyBookingsModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 
-<h2>All Bookings</h2>
+<h2>Your Bookings</h2>
 
-@if (SignInManager.IsSignedIn(User))
+@if (Model.UserBookings != null && Model.UserBookings.Count > 0)
 {
     <table class="table table-bordered mt-4">
         <thead>
@@ -14,18 +14,18 @@
                 <th>Date</th>
                 <th>Purpose</th>
                 <th>Duration</th>
-                <th>Email</th>
+                <th>Deposit Paid</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var booking in Model.Bookings)
+            @foreach (var booking in Model.UserBookings)
             {
                 <tr>
                     <td>@booking.RentalName</td>
                     <td>@booking.RentalDate.ToShortDateString()</td>
                     <td>@booking.Purpose</td>
                     <td>@(booking.IsTwoDays ? "2 Days" : "1 Day")</td>
-                    <td>@booking.UserEmail</td>
+                    <td>@(booking.DepositPaid ? "Yes" : "No")</td>
                 </tr>
             }
         </tbody>
@@ -33,6 +33,6 @@
 }
 else
 {
-    <div class="alert alert-danger">You must be logged in to view this page.</div>
+    <p>You haven’t booked anything yet.</p>
 }
 
