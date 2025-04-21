@@ -35,6 +35,10 @@ namespace GiantLeapRental.Pages.Rentals
 
         public IActionResult OnPost(int id)
         {
+            TempData["RentalName"] = SelectedRental.Name;
+            TempData["RentalDate"] = RentalDate.ToShortDateString();
+            TempData["IsTwoDays"] = IsTwoDays;
+            TempData["Purpose"] = Purpose;
             // TODO: Save booking to database (future step)
             return RedirectToPage("/Confirmation");
         }

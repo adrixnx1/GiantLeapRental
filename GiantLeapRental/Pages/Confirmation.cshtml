@@ -1,0 +1,19 @@
+﻿@page
+@model GiantLeapRental.Pages.ConfirmationModel
+
+<h2>Booking Confirmed! 🎉</h2>
+
+@if (Model.RentalName != null)
+{
+    <p><strong>Bouncy House:</strong> @Model.RentalName</p>
+    <p><strong>Date:</strong> @Model.RentalDate</p>
+    <p><strong>Duration:</strong> @(Model.IsTwoDays ? "2 Days" : "1 Day")</p>
+    <p><strong>Purpose:</strong> @Model.Purpose</p>
+    <p>You'll receive a confirmation email shortly. A deposit may be required to fully secure your date.</p>
+}
+else
+{
+    <p>Oops! No booking information found. Please try again.</p>
+}
+
+<a href="/" class="btn btn-primary mt-4">Back to Home</a>
