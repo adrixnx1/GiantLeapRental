@@ -1,10 +1,22 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Giant Leap Rentals</h1>
+
+<div class="row">
+    @foreach (var rental in Model.Rentals)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="@rental.ImageUrl" class="card-img-top" alt="@rental.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@rental.Name</h5>
+                    <p class="card-text">@rental.Description</p>
+                    <p><strong>1-Day Price:</strong> $@rental.PricePerDay</p>
+                    <p><strong>2-Day Price:</strong> $@rental.PriceForTwoDays</p>
+                    <a href="/Rentals/Details?id=@rental.Id" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+    }
 </div>

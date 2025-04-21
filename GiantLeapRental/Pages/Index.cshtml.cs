@@ -1,20 +1,31 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using GiantLeapRental.Models;
+using GiantLeapRental.Model;
 
-namespace GiantLeapRental.Pages
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    public List<Rental> Rentals { get; set; }
+
+    public void OnGet()
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        Rentals = new List<Rental>
         {
-            _logger = logger;
-        }
-
-        public void OnGet()
-        {
-
-        }
+            new Rental
+            {
+                Id = 1,
+                Name = "Castle Bounce",
+                Description = "Classic colorful bouncy castle.",
+                ImageUrl = "/images/castle.jpg",
+                PricePerDay = 100
+            },
+            new Rental
+            {
+                Id = 2,
+                Name = "Jungle Adventure",
+                Description = "Bounce into the jungle with this wild setup.",
+                ImageUrl = "/images/jungle.jpg",
+                PricePerDay = 120
+            }
+        };
     }
 }
