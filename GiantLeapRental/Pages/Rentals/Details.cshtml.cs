@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using GiantLeapRental.Data;
 using GiantLeapRental.Models;
+using GiantLeapRental.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace GiantLeapRental.Pages.Rentals
 {
@@ -12,11 +14,13 @@ namespace GiantLeapRental.Pages.Rentals
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly EmailSender _emailSender;
 
-        public DetailsModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public DetailsModel(ApplicationDbContext context, UserManager<IdentityUser> userManager, EmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         public Rental SelectedRental { get; set; }
@@ -77,6 +81,14 @@ namespace GiantLeapRental.Pages.Rentals
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
+
+            _emailSender.Send(
+                toEmail: user.Email,
+                subject: "Your Giant Leap Rental Booking",
+                body: $"Thank you for booking **{booking.RentalName}** on {booking.RentalDate:d}.\n\n" +
+                      $"Duration: {(booking.IsTwoDays ? "2 Days" : "1 Day")}\n" +
+                      $"Purpose: {booking.Purpose}\n\nWe’ll follow up with more info soon!"
+            );
 
             TempData["RentalName"] = booking.RentalName;
             TempData["RentalDate"] = booking.RentalDate.ToShortDateString();
