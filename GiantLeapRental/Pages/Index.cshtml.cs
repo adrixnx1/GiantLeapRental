@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using GiantLeapRental.Models;
-using GiantLeapRental.Model;
+
 
 public class IndexModel : PageModel
 {
