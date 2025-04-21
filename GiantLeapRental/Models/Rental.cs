@@ -8,5 +8,7 @@
         public string ImageUrl { get; set; }
         public decimal PricePerDay { get; set; }
         public decimal PriceForTwoDays => PricePerDay * 1.75m;
+        public string Category { get; set; }  // Example: "Water Slide + Bounce House"
+
     }
 }
