@@ -13,8 +13,7 @@ namespace GiantLeapRental.Pages.Admin
         {
             Bookings = new List<Booking>
             {
-                new Booking { RentalName = "Castle Bounce", Date = "May 10, 2025", Purpose = "Birthday", IsTwoDays = false },
-                new Booking { RentalName = "Jungle Adventure", Date = "May 19, 2025", Purpose = "School Event", IsTwoDays = true },
+                new Booking { RentalName = "Castle", RentalDate = DateTime.Today }
             };
         }
     }

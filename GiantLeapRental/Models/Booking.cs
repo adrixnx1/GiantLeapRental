@@ -1,12 +1,25 @@
-﻿namespace GiantLeapRental.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GiantLeapRental.Models
 {
     public class Booking
     {
+        public int Id { get; set; }
+
+        [Required]
         public string RentalName { get; set; }
-        public string Date { get; set; }
+
+        [Required]
+        public string UserEmail { get; set; }
+
+        [Required]
+        public DateTime RentalDate { get; set; }
+
         public string Purpose { get; set; }
-        public string Duration => IsTwoDays ? "2 Days" : "1 Day";
+
         public bool IsTwoDays { get; set; }
-        public bool DepositPaid { get; set; } // future use
+
+        public bool DepositPaid { get; set; } = false;
     }
 }
+

@@ -21,9 +21,9 @@
             {
                 <tr>
                     <td>@booking.RentalName</td>
-                    <td>@booking.Date</td>
+                    <td>@booking.RentalDate.ToShortDateString()</td> <!-- ✅ Fixed -->
                     <td>@booking.Purpose</td>
-                    <td>@booking.Duration</td>
+                    <td>@(booking.IsTwoDays ? "2 Days" : "1 Day")</td>
                 </tr>
             }
         </tbody>

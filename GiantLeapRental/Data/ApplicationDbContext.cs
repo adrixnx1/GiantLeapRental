@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using GiantLeapRental.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GiantLeapRental.Data
@@ -9,5 +10,6 @@ namespace GiantLeapRental.Data
             : base(options)
         {
         }
+        public DbSet<Booking> Bookings { get; set; }
     }
 }
