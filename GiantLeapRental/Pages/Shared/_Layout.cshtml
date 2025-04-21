@@ -3,7 +3,8 @@
 @inject UserManager<IdentityUser> UserManager
 
 @{
-    var isAdmin = User.Identity.IsAuthenticated && UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin").Result;
+    var user = UserManager.GetUserAsync(User).Result;
+    var isAdmin = user != null && UserManager.IsInRoleAsync(user, "Admin").Result;
 }
 
 <!DOCTYPE html>

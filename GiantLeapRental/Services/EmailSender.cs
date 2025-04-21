@@ -15,13 +15,13 @@ namespace GiantLeapRental.Services
 
         public void Send(string toEmail, string subject, string body)
         {
-            var smtpConfig = _config.GetSection("Smtp");
+            var smtp = _config.GetSection("Smtp");
 
-            var fromEmail = smtpConfig["FromEmail"];
-            var password = smtpConfig["Password"];
-            var host = smtpConfig["Host"];
-            var port = int.Parse(smtpConfig["Port"]);
-            var enableSsl = bool.Parse(smtpConfig["EnableSsl"]);
+            var fromEmail = smtp["FromEmail"];
+            var password = smtp["Password"];
+            var host = smtp["Host"];
+            var port = int.Parse(smtp["Port"]);
+            var enableSsl = bool.Parse(smtp["EnableSsl"]);
 
             var client = new SmtpClient(host, port)
             {
@@ -38,3 +38,4 @@ namespace GiantLeapRental.Services
         }
     }
 }
+
