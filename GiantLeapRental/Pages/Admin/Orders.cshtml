@@ -14,7 +14,8 @@
                 <th>Date</th>
                 <th>Purpose</th>
                 <th>Duration</th>
-                <th>Email</th>
+                <th>User Email</th>
+                <th>Deposit</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,14 @@
                     <td>@booking.Purpose</td>
                     <td>@(booking.IsTwoDays ? "2 Days" : "1 Day")</td>
                     <td>@booking.UserEmail</td>
+                    <td>
+                        <form method="post" asp-page-handler="ToggleDeposit">
+                            <input type="hidden" name="id" value="@booking.Id" />
+                            <button type="submit" class="btn btn-sm @(booking.DepositPaid ? "btn-success" : "btn-warning")">
+                                @(booking.DepositPaid ? "Paid" : "Mark Paid")
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -35,4 +44,3 @@ else
 {
     <div class="alert alert-danger">You must be logged in to view this page.</div>
 }
-

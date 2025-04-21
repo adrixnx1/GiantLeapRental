@@ -3,12 +3,15 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 
+@{
+    var booked = Model.BookedDates.Select(d => d.ToString("yyyy-MM-dd")).ToList();
+}
+
 <h2>@Model.SelectedRental.Name</h2>
 
 <img src="@Model.SelectedRental.ImageUrl" alt="@Model.SelectedRental.Name" width="400" />
 
-<p>@Model.SelectedRental.Description</p>
-
+<p><strong>Description:</strong> @Model.SelectedRental.Description</p>
 <p><strong>Type:</strong> @Model.SelectedRental.Category</p>
 <p><strong>1-Day Price:</strong> $@Model.SelectedRental.PricePerDay</p>
 <p><strong>2-Day Price:</strong> $@Model.SelectedRental.PriceForTwoDays</p>
@@ -18,10 +21,15 @@
     <form method="post">
         <div class="form-group">
             <label>Select Date:</label>
-            <input type="date" asp-for="RentalDate" class="form-control" required />
+            <input type="date"
+                   asp-for="RentalDate"
+                   class="form-control"
+                   min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                   oninput="checkBookedDate(this)"
+                   required />
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label>Purpose:</label>
             <select asp-for="Purpose" class="form-control">
                 <option>Birthday</option>
@@ -31,7 +39,7 @@
             </select>
         </div>
 
-        <div class="form-check">
+        <div class="form-check mt-2">
             <input type="checkbox" asp-for="IsTwoDays" class="form-check-input" />
             <label class="form-check-label">Book for 2 days</label>
         </div>
@@ -45,3 +53,18 @@ else
         <strong>Please log in</strong> to book this rental.
     </div>
 }
+
+@section Scripts {
+    <script>
+        const bookedDates = @Html.Raw(Json.Serialize(booked));
+
+        function checkBookedDate(input) {
+            const selected = input.value;
+            if (bookedDates.includes(selected)) {
+                alert("This date is already booked. Please choose another.");
+                input.value = "";
+            }
+        }
+    </script>
+}
+

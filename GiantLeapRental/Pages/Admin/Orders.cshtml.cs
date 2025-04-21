@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using GiantLeapRental.Models;
 using GiantLeapRental.Data;
 
@@ -19,8 +20,21 @@ namespace GiantLeapRental.Pages.Admin
 
         public void OnGet()
         {
-            Bookings = _context.Bookings.ToList();
+            Bookings = _context.Bookings
+                .OrderBy(b => b.RentalDate)
+                .ToList();
+        }
+
+        // ✅ Toggle deposit paid status
+        public async Task<IActionResult> OnPostToggleDepositAsync(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking != null)
+            {
+                booking.DepositPaid = !booking.DepositPaid;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToPage();
         }
     }
 }
-
