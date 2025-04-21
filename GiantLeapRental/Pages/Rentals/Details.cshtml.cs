@@ -94,6 +94,8 @@ namespace GiantLeapRental.Pages.Rentals
             TempData["RentalDate"] = booking.RentalDate.ToShortDateString();
             TempData["IsTwoDays"] = booking.IsTwoDays;
             TempData["Purpose"] = booking.Purpose;
+            TempData["BookingId"] = booking.Id;
+
 
             return RedirectToPage("/Confirmation");
         }

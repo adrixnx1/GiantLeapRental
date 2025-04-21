@@ -24,6 +24,9 @@ builder.Services.AddScoped<EmailSender>();
 
 var app = builder.Build();
 
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
