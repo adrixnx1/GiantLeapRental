@@ -48,8 +48,12 @@ namespace GiantLeapRental.Pages.Rentals
             if (SelectedRental == null) return NotFound();
 
             // 🧹 Remove expired bookings older than 10 minutes that were never confirmed
-            var expired = _context.Bookings
-                .Where(b => !b.IsConfirmed && (DateTime.Now - b.CreatedAt).TotalMinutes > 10)
+            var allPending = _context.Bookings
+    .Where(b => !b.IsConfirmed)
+    .ToList();
+
+            var expired = allPending
+                .Where(b => (DateTime.Now - b.CreatedAt).TotalMinutes > 10)
                 .ToList();
 
             if (expired.Any())
@@ -57,6 +61,7 @@ namespace GiantLeapRental.Pages.Rentals
                 _context.Bookings.RemoveRange(expired);
                 _context.SaveChanges();
             }
+
 
             // 🗓️ Load only confirmed bookings to block the calendar
             BookedDates = _context.Bookings
