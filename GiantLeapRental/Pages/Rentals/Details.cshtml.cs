@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -39,22 +39,34 @@ namespace GiantLeapRental.Pages.Rentals
         public IActionResult OnGet(int id)
         {
             var rentals = new List<Rental>
-            {
-                new Rental { Id = 1, Name = "Castle Bounce", Description = "Classic colorful bouncy castle.", Category = "Bounce House", ImageUrl = "/images/castle.jpg", PricePerDay = 100 },
-                new Rental { Id = 2, Name = "Jungle Adventure", Description = "Bounce into the jungle!", Category = "Obstacle + Bounce House", ImageUrl = "/images/jungle.jpg", PricePerDay = 120 }
-            };
+    {
+        new Rental { Id = 1, Name = "Castle Bounce", Description = "Classic colorful bouncy castle.", Category = "Bounce House", ImageUrl = "/images/castle.jpg", PricePerDay = 100 },
+        new Rental { Id = 2, Name = "Jungle Adventure", Description = "Bounce into the jungle!", Category = "Obstacle + Bounce House", ImageUrl = "/images/jungle.jpg", PricePerDay = 120 }
+    };
 
             SelectedRental = rentals.FirstOrDefault(r => r.Id == id);
             if (SelectedRental == null) return NotFound();
 
-            // Load already booked dates for this rental
+            // 🧹 Remove expired bookings older than 10 minutes that were never confirmed
+            var expired = _context.Bookings
+                .Where(b => !b.IsConfirmed && (DateTime.Now - b.CreatedAt).TotalMinutes > 10)
+                .ToList();
+
+            if (expired.Any())
+            {
+                _context.Bookings.RemoveRange(expired);
+                _context.SaveChanges();
+            }
+
+            // 🗓️ Load only confirmed bookings to block the calendar
             BookedDates = _context.Bookings
-                .Where(b => b.RentalName == SelectedRental.Name)
+                .Where(b => b.RentalName == SelectedRental.Name && b.IsConfirmed)
                 .Select(b => b.RentalDate)
                 .ToList();
 
             return Page();
         }
+
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
@@ -62,10 +74,10 @@ namespace GiantLeapRental.Pages.Rentals
             if (user == null) return RedirectToPage("/Account/Login");
 
             var rental = new List<Rental>
-            {
-                new Rental { Id = 1, Name = "Castle Bounce", Description = "Classic colorful bouncy castle.", Category = "Bounce House", ImageUrl = "/images/castle.jpg", PricePerDay = 100 },
-                new Rental { Id = 2, Name = "Jungle Adventure", Description = "Bounce into the jungle!", Category = "Obstacle + Bounce House", ImageUrl = "/images/jungle.jpg", PricePerDay = 120 }
-            }.FirstOrDefault(r => r.Id == id);
+    {
+        new Rental { Id = 1, Name = "Castle Bounce", Description = "Classic colorful bouncy castle.", Category = "Bounce House", ImageUrl = "/images/castle.jpg", PricePerDay = 100 },
+        new Rental { Id = 2, Name = "Jungle Adventure", Description = "Bounce into the jungle!", Category = "Obstacle + Bounce House", ImageUrl = "/images/jungle.jpg", PricePerDay = 120 }
+    }.FirstOrDefault(r => r.Id == id);
 
             if (rental == null) return NotFound();
 
@@ -87,18 +99,11 @@ namespace GiantLeapRental.Pages.Rentals
                 subject: "Your Giant Leap Rental Booking",
                 body: $"Thank you for booking **{booking.RentalName}** on {booking.RentalDate:d}.\n\n" +
                       $"Duration: {(booking.IsTwoDays ? "2 Days" : "1 Day")}\n" +
-                      $"Purpose: {booking.Purpose}\n\nWe�ll follow up with more info soon!"
+                      $"Purpose: {booking.Purpose}\n\nWe’ll follow up with more info soon!"
             );
 
-            TempData["RentalName"] = booking.RentalName;
-            TempData["RentalDate"] = booking.RentalDate.ToShortDateString();
-            TempData["IsTwoDays"] = booking.IsTwoDays;
-            TempData["Purpose"] = booking.Purpose;
-            TempData["BookingId"] = booking.Id;
-
-
-            return RedirectToPage("/Confirmation");
+            // ✅ Redirect using query param instead of TempData
+            return RedirectToPage("/Confirmation", new { bookingId = booking.Id });
         }
     }
 }
-

@@ -1,20 +1,30 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using GiantLeapRental.Data;
+using GiantLeapRental.Models;
 
 namespace GiantLeapRental.Pages
 {
     public class ConfirmationModel : PageModel
     {
-        public string RentalName { get; set; }
-        public string RentalDate { get; set; }
-        public string Purpose { get; set; }
-        public bool IsTwoDays { get; set; }
+        private readonly ApplicationDbContext _context;
 
-        public void OnGet()
+        public ConfirmationModel(ApplicationDbContext context)
         {
-            RentalName = TempData["RentalName"]?.ToString();
-            RentalDate = TempData["RentalDate"]?.ToString();
-            Purpose = TempData["Purpose"]?.ToString();
-            IsTwoDays = TempData["IsTwoDays"] != null && bool.Parse(TempData["IsTwoDays"].ToString());
+            _context = context;
+        }
+
+        public Booking Booking { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int bookingId)
+        {
+            Booking = await _context.Bookings.FindAsync(bookingId);
+            if (Booking == null)
+            {
+                return NotFound();
+            }
+
+            return Page();
         }
     }
 }

@@ -1,29 +1,39 @@
 ﻿@page
 @model GiantLeapRental.Pages.ConfirmationModel
+
 @{
     ViewData["Title"] = "Booking Confirmation";
 }
 
-<div class="container mt-5 text-center">
-    <h2 class="mb-3 text-success">🎉 Booking Confirmed!</h2>
+<h2>🎉 Booking Confirmed!</h2>
 
-    <p class="lead">Thank you for booking <strong>@Model.RentalName</strong>!</p>
+@if (Model.Booking != null)
+{
+    <div class="card p-4 shadow-sm">
+        <h4>@Model.Booking.RentalName</h4>
 
-    <ul class="list-group list-group-flush mb-4">
-        <li class="list-group-item">
-            <strong>Date:</strong> @Model.RentalDate
-        </li>
-        <li class="list-group-item">
-            <strong>Duration:</strong> @(Model.IsTwoDays ? "2 Days" : "1 Day")
-        </li>
-        <li class="list-group-item">
-            <strong>Purpose:</strong> @Model.Purpose
-        </li>
-    </ul>
+        <p><strong>Date:</strong> @Model.Booking.RentalDate.ToShortDateString()</p>
+        <p><strong>Duration:</strong> @(Model.Booking.IsTwoDays ? "2 Days" : "1 Day")</p>
+        <p><strong>Purpose:</strong> @Model.Booking.Purpose</p>
+        <p><strong>Email:</strong> @Model.Booking.UserEmail</p>
 
-    <a href="/Checkout?bookingId=@TempData["BookingId"]" class="btn btn-lg btn-success shadow-sm">
-        💳 Pay $75 Deposit Now
-    </a>
+        <hr />
 
-    <p class="text-muted mt-3">A deposit is required to hold your booking.</p>
-</div>
+        @if (!Model.Booking.DepositPaid)
+        {
+            <a href="/Checkout?bookingId=@Model.Booking.Id" class="btn btn-success">
+                💳 Pay $75 Deposit Now
+            </a>
+        }
+        else
+        {
+            <span class="badge bg-success">Deposit Paid</span>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        Booking not found.
+    </div>
+}

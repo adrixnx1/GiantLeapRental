@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using GiantLeapRental.Models;
 using GiantLeapRental.Data;
+using GiantLeapRental.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GiantLeapRental.Pages.Admin
 {
@@ -18,14 +19,15 @@ namespace GiantLeapRental.Pages.Admin
 
         public List<Booking> Bookings { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Bookings = _context.Bookings
+            Bookings = await _context.Bookings
                 .OrderBy(b => b.RentalDate)
-                .ToList();
+                .ToListAsync();
+
+            return Page();
         }
 
-        // ✅ Toggle deposit paid status
         public async Task<IActionResult> OnPostToggleDepositAsync(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);
@@ -34,19 +36,20 @@ namespace GiantLeapRental.Pages.Admin
                 booking.DepositPaid = !booking.DepositPaid;
                 await _context.SaveChangesAsync();
             }
+
             return RedirectToPage();
         }
+
         public async Task<IActionResult> OnPostCancelBookingAsync(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);
             if (booking != null)
             {
-                _context.Bookings.Remove(booking); // or set booking.IsCanceled = true;
+                _context.Bookings.Remove(booking); // or use booking.IsCanceled = true;
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage(); // refresh the page
+            return RedirectToPage();
         }
-
     }
 }
