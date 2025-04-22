@@ -36,5 +36,17 @@ namespace GiantLeapRental.Pages.Admin
             }
             return RedirectToPage();
         }
+        public async Task<IActionResult> OnPostCancelBookingAsync(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking != null)
+            {
+                _context.Bookings.Remove(booking); // or set booking.IsCanceled = true;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage(); // refresh the page
+        }
+
     }
 }

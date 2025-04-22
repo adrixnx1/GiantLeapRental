@@ -22,6 +22,7 @@
                 <th>Duration</th>
                 <th>User Email</th>
                 <th>Deposit</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,14 @@
                             <input type="hidden" name="id" value="@booking.Id" />
                             <button type="submit" class="btn btn-sm @(booking.DepositPaid ? "btn-success" : "btn-warning")">
                                 @(booking.DepositPaid ? "Paid" : "Mark Paid")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="CancelBooking" onsubmit="return confirm('Cancel this booking?');">
+                            <input type="hidden" name="id" value="@booking.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                ❌ Cancel
                             </button>
                         </form>
                     </td>
