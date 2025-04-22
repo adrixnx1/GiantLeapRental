@@ -7,8 +7,14 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <table class="table table-bordered mt-4">
-        <thead>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="/Admin/ExportPdf" class="btn btn-outline-primary">
+            🖨️ Download Bookings (PDF)
+        </a>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="table-light">
             <tr>
                 <th>Rental</th>
                 <th>Date</th>
