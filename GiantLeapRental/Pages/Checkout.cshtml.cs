@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using GiantLeapRental.Data;
 using GiantLeapRental.Models;
 using Stripe.Checkout;
@@ -14,11 +13,6 @@ namespace GiantLeapRental.Pages
         public CheckoutModel(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-            return RedirectToPage("/Index");
         }
 
         public async Task<IActionResult> OnGetAsync(int bookingId)
@@ -40,15 +34,15 @@ namespace GiantLeapRental.Pages
                     {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmount = 7500, // $75 deposit
+                            UnitAmount = 7500,
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = $"Deposit for {booking.RentalName} on {booking.RentalDate.ToShortDateString()}",
-                            },
+                                Name = $"Deposit for {booking.RentalName} on {booking.RentalDate.ToShortDateString()}"
+                            }
                         },
-                        Quantity = 1,
-                    },
+                        Quantity = 1
+                    }
                 },
                 Mode = "payment",
                 SuccessUrl = $"{domain}/Success?bookingId={booking.Id}",
@@ -57,11 +51,6 @@ namespace GiantLeapRental.Pages
 
             var service = new SessionService();
             Session session = service.Create(options);
-
-            // ✅ Confirm the booking now that payment session has been created (optional — or do it in /Success)
-            // You may prefer to do this in Success.cshtml.cs instead!
-            // booking.IsConfirmed = true;
-            // await _context.SaveChangesAsync();
 
             return Redirect(session.Url);
         }

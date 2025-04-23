@@ -1,12 +1,10 @@
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
 using GiantLeapRental.Data;
-using Microsoft.AspNetCore.Mvc;
 using GiantLeapRental.Models;
 
 namespace GiantLeapRental.Pages
 {
-    [Authorize]
     public class SuccessModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -16,20 +14,18 @@ namespace GiantLeapRental.Pages
             _context = context;
         }
 
-        public Booking Booking { get; set; }
+        public Booking Booking { get; set; } // ✅ Add this so @Model.Booking works in the .cshtml file
 
         public async Task<IActionResult> OnGetAsync(int bookingId)
         {
-            var booking = await _context.Bookings.FindAsync(bookingId);
-            if (booking == null)
-            {
+            Booking = await _context.Bookings.FindAsync(bookingId);
+            if (Booking == null)
                 return NotFound();
-            }
 
-            if (!booking.DepositPaid)
+            if (!Booking.DepositPaid)
             {
-                booking.DepositPaid = true;
-                booking.IsConfirmed = true;
+                Booking.DepositPaid = true;
+                Booking.IsConfirmed = true;
                 await _context.SaveChangesAsync();
             }
 

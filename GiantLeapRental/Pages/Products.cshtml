@@ -1,0 +1,25 @@
+﻿@page
+@model GiantLeapRental.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Available Rentals";
+}
+
+<h2 class="mb-4">🎪 Our Bouncy Houses</h2>
+
+<div class="row">
+    @foreach (var rental in Model.Rentals)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <img class="card-img-top" src="@rental.ImageUrl" alt="@rental.Name" style="height: 200px; object-fit: cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@rental.Name</h5>
+                    <p class="card-text"><strong>Category:</strong> @rental.Category</p>
+                    <p class="card-text"><strong>Price:</strong> $@rental.PricePerDay / day</p>
+                    <a class="btn btn-primary w-100" href="/Rentals/Details?id=@rental.Id">Book Now</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

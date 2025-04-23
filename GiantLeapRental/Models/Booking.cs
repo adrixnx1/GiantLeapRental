@@ -20,6 +20,7 @@ namespace GiantLeapRental.Models
         public bool IsTwoDays { get; set; }
 
         public bool DepositPaid { get; set; } = false;
+        // ✅ NEW FIELDS
         public bool IsConfirmed { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 

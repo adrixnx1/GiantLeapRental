@@ -11,5 +11,7 @@ namespace GiantLeapRental.Data
         {
         }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
+
     }
 }
