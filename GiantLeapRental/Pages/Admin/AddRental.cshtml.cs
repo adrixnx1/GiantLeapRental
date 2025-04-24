@@ -23,20 +23,21 @@ namespace GiantLeapRental.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Console.WriteLine("🔁 Form posted. Rental name: " + NewRental?.Name);
+
             if (!ModelState.IsValid)
             {
-                Console.WriteLine("⚠️ Form submission invalid.");
+                Console.WriteLine("⚠️ Form not valid");
                 return Page();
             }
-
-            Console.WriteLine("✅ Rental submitted: " + NewRental.Name);
 
             _context.Rentals.Add(NewRental);
             await _context.SaveChangesAsync();
 
-            Console.WriteLine("✅ Rental saved to database.");
+            Console.WriteLine("✅ Rental saved!");
             return RedirectToPage("/Products");
         }
+
 
     }
 }
